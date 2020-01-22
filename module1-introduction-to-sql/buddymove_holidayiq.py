@@ -17,7 +17,7 @@ rows = curs1.fetchall()
 #print(rows)
 
 curs2 = conn.cursor()
-query = """SELECT COUNT(*)
+query = """SELECT COUNT(*)`User Id`
         FROM review
         WHERE Nature >= 100 
         AND Shopping >= 100;"""

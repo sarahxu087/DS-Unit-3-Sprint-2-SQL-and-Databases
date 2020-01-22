@@ -52,7 +52,7 @@ print(total_weapon)
 curs8= conn.cursor()
 query = """SELECT (SELECT COUNT(item_id)
         FROM armory_item)-(SELECT COUNT(item_ptr_id) 
-        FROM armory_weapon);"""
+        FROM armory_weapon)nonweapon;"""
 curs8.execute(query)
 total_nonweapon = curs8.fetchall()
 print(total_nonweapon)
@@ -82,15 +82,30 @@ print(character_weapon)
 
 
 curs11= conn.cursor()
-query = """SELECT AVG(item_id)
-FROM armory_item;"""
+query = """SELECT ROUND(AVG(num_items) ,1) avg_item
+           FROM (
+                SELECT count(ai.item_id) AS num_items
+                FROM charactercreator_character AS cc,armory_item AS ai,
+                charactercreator_character_inventory AS cci
+                WHERE cc.character_id = cci.character_id
+                AND ai.item_id = cci.item_id
+                GROUP BY cc.character_id
+                );"""
 curs11.execute(query)
 avg_item = curs11.fetchall()
 print(avg_item)
 
 curs12= conn.cursor()
-query = """SELECT AVG(item_ptr_id)
-FROM armory_weapon;"""
+query = """SELECT ROUND(AVG(num_items),1) avg_weapon
+           FROM (
+                SELECT cc.character_id, cc.name AS character_name, COUNT(ai.item_ptr_id) AS num_items
+                FROM charactercreator_character AS cc,
+                armory_weapon AS ai,
+                charactercreator_character_inventory AS cci
+                WHERE cc.character_id = cci.character_id
+                AND ai.item_ptr_id = cci.item_id
+                GROUP BY cc.character_id
+                );"""
 curs12.execute(query)
 avg_weapon = curs12.fetchall()
 print(avg_weapon)
