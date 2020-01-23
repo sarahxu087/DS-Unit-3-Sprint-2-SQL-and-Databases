@@ -28,7 +28,7 @@ titanic=df_curs.execute('SELECT * FROM titanic').fetchall()
 print(df_curs.execute('PRAGMA table_info(titanic);').fetchall())
 create_titanic_table ="""
 CREATE TABLE IF NOT EXISTS Titanic(
-    index INT,
+    index SERIAL PRIMARY KEY,
     Survived INT,
     Pclass INT,
     Name TEXT,
